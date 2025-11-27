@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>readme</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="README_files/libs/clipboard/clipboard.min.js"></script>
+<script src="README_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="README_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="README_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="README_files/libs/quarto-html/popper.min.js"></script>
+<script src="README_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="README_files/libs/quarto-html/anchor.min.js"></script>
+<link href="README_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="README_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="README_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="README_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="README_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="temporally-consistent-landcover-classification-for-indias-open-natural-ecosystems" class="level1">
+<h1>Temporally-Consistent Landcover Classification for India’s Open Natural Ecosystems</h1>
+<p>Annual time-series landcover maps (2017-2024) at 10m resolution using hierarchical classification and Hidden Markov Model-based temporal consistency.</p>
+<hr>
+<section id="table-of-contents" class="level2">
+<h2 class="anchored" data-anchor-id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#conceptual-framework">Conceptual Framework</a>
+<ul>
+<li><a href="#what-this-repository-does">What This Repository Does</a></li>
+<li><a href="#our-approach">Our Approach</a></li>
+<li><a href="#input-data">Input Data</a></li>
+<li><a href="#stage-1-probabilistic-classification">Stage 1: Probabilistic Classification</a></li>
+<li><a href="#stage-2-hierarchical-classification">Stage 2: Hierarchical Classification</a></li>
+<li><a href="#label-hierarchy">Label Hierarchy</a></li>
+<li><a href="#stage-3-temporal-consistency">Stage 3: Temporal Consistency</a></li>
+<li><a href="#outputs">Outputs</a></li>
+</ul></li>
+<li><a href="#workflow-flowchart">Workflow Flowchart</a></li>
+<li><a href="#reproducible-workflow">Reproducible Workflow</a>
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#step-by-step-workflow">Step-by-Step Workflow</a></li>
+<li><a href="#module-reference">Module Reference</a></li>
+<li><a href="#output-specifications">Output Specifications</a></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="conceptual-framework" class="level2">
+<h2 class="anchored" data-anchor-id="conceptual-framework">Conceptual Framework</h2>
+<section id="what-this-repository-does" class="level3">
+<h3 class="anchored" data-anchor-id="what-this-repository-does">What This Repository Does</h3>
+<p>This repository produces temporally-consistent annual landcover maps from 2017 to 2024 across 17 Indian states at 10m resolution. The output includes:</p>
+<ol type="1">
+<li><strong>Annual probability maps</strong>: Full probability distributions across 11 landcover classes for each year</li>
+<li><strong>Temporally-consistent labels</strong>: Discrete landcover classifications that are statistically smoothed across the time series to reduce spurious transitions while preserving genuine landscape change</li>
+</ol>
+<p>The classification distinguishes 11 landcover types, with particular emphasis on accurately mapping India’s Open Natural Ecosystems (ONEs)—6 types including grassland savanna, shrubland savanna, woodland savanna, and other non-forest ecosystems that are often misclassified or overlooked in conventional landcover products.</p>
+<p><strong>Geographic Coverage</strong>: 17 Indian states <strong>Temporal Coverage</strong>: 2017-2024 (8 years) <strong>Spatial Resolution</strong>: 10m pixel size <strong>Classification Scheme</strong>: 11 classes organized in a 3-level hierarchy</p>
+<hr>
+</section>
+<section id="our-approach" class="level3">
+<h3 class="anchored" data-anchor-id="our-approach">Our Approach</h3>
+<p>We produce annual landcover maps through a three-stage process that combines probabilistic hierarchical classification with temporal consistency enforcement.</p>
+<hr>
+</section>
+<section id="input-data" class="level3">
+<h3 class="anchored" data-anchor-id="input-data">Input Data</h3>
+<p><strong>Satellite Features</strong>: - <strong>Google Satellite Embeddings</strong> (2017-2024): 64-band learned representations from Google’s deep learning model, capturing spectral, textural, and contextual information at 10m resolution - <strong>Agroecological Regions</strong>: Zonation layer with 16 regions across India, used to stratify classification and account for regional variation in landcover patterns - <strong>Spatial Coordinates</strong>: Longitude and latitude for each pixel, providing geographic context</p>
+<p><strong>Training Data</strong>: - <strong>Temporal coverage</strong>: Year-wise labeled samples for 2017-2024 - <strong>Spatial balance</strong>: Stratified across 16 agroecological regions to ensure representation of India’s diverse landscapes - <strong>Class balance</strong>: Balanced across all 11 landcover types to prevent classifier bias toward dominant classes - <strong>Source</strong>: Assembled from publicly available landcover masks and reference layers (see <a href="trainingData/"><code>trainingData/</code></a> folder)</p>
+<p><strong>Study Area</strong>: - <strong>States</strong>: Delhi, Punjab, Uttar Pradesh, Haryana, Rajasthan, Gujarat, Maharashtra, Madhya Pradesh, Chhattisgarh, Jharkhand, Bihar, Telangana, Andhra Pradesh, Tamil Nadu, Karnataka, Goa, West Bengal - <strong>Resolution</strong>: 10m pixel size - <strong>Projection</strong>: EPSG:24343 for export</p>
+<hr>
+</section>
+<section id="stage-1-probabilistic-classification" class="level3">
+<h3 class="anchored" data-anchor-id="stage-1-probabilistic-classification">Stage 1: Probabilistic Classification</h3>
+<p>Rather than producing only discrete class labels, we generate full probability distributions for each pixel.</p>
+<p><strong>Key Design Choice</strong>: Our classifiers output probabilities for all possible landcover classes, not just a single “best guess” label. This probabilistic output captures classification uncertainty and enables more sophisticated downstream processing.</p>
+<p><strong>Why probabilities matter</strong>: - A pixel with probabilities [forest: 0.51, shrubland: 0.49] is fundamentally different from [forest: 0.99, shrubland: 0.01], even though both would be labeled “forest” in a discrete classification - Probability distributions allow us to identify ambiguous pixels and propagate uncertainty through subsequent analysis - Temporal smoothing (Stage 3) leverages these probabilities to make statistically informed decisions about label sequences</p>
+<p><strong>Technical Implementation</strong>: - <strong>Classifier</strong>: Gradient Boosted Trees (<code>ee.Classifier.smileGradientTreeBoost</code>) - <strong>Configuration</strong>: 150 trees, 500 maximum nodes per tree - <strong>Training split</strong>: 70% of samples used for training, 30% held out (note: the 30% validation holdout has not been used for formal validation in this analysis) - <strong>Output mode</strong>: <code>MULTIPROBABILITY</code> - produces probability distributions rather than hard classifications - <strong>Storage</strong>: Probabilities scaled by 10,000 and stored as uint16 for efficiency (divide by 10,000 to recover actual probabilities)</p>
+<hr>
+</section>
+<section id="stage-2-hierarchical-classification" class="level3">
+<h3 class="anchored" data-anchor-id="stage-2-hierarchical-classification">Stage 2: Hierarchical Classification</h3>
+<p>We employ an explicitly hierarchical approach that breaks the 11-class problem into smaller, more manageable sub-problems organized by a classification tree.</p>
+<p><strong>Hierarchical Strategy</strong>: Instead of training a single classifier to distinguish all 11 classes simultaneously, we: 1. First classify pixels into broad categories (Level 1) 2. Then specialize classifiers for detailed types within each broad category (Level 2) 3. Mathematically merge the hierarchical predictions to obtain final 11-class probabilities</p>
+<p><strong>Why hierarchical?</strong> This approach improves accuracy by: - Allowing each classifier to focus on distinguishing between fewer, more closely related classes - Incorporating prior knowledge about landcover relationships (e.g., grassland savanna and shrubland savanna are more similar to each other than to built-up areas) - Reducing classification errors through structured decision-making</p>
+<hr>
+</section>
+<section id="label-hierarchy" class="level3">
+<h3 class="anchored" data-anchor-id="label-hierarchy">Label Hierarchy</h3>
+<p>Our classification uses a 3-level hierarchy with 11 landcover classes at the finest level:</p>
+<pre><code>Level 0: Landcover (root)
+├─ Level 1: non-ONE (code: 100)
+│  ├─ Level 2: agri_open (1)              - Agriculture and open lands
+│  ├─ Level 2: built (3)                  - Built-up areas
+│  ├─ Level 2: cultivated_trees (4)       - Plantations and orchards
+│  ├─ Level 2: forest (6)                 - Closed-canopy forests
+│  └─ Level 2: water_wetland (11)         - Water bodies and wetlands
+└─ Level 1: ONE (code: 200)
+   ├─ Level 2: bare_rocky (2)             - Bare ground and rocky terrain
+   ├─ Level 2: dunes (5)                  - Sand dunes
+   ├─ Level 2: saline_flat (7)            - Salt flats and saline areas
+   ├─ Level 2: savanna_grass (8)          - Grassland savanna
+   ├─ Level 2: savanna_shrub (9)          - Shrubland savanna
+   └─ Level 2: savanna_tree (10)          - Woodland savanna</code></pre>
+<p><strong>Numeric codes</strong> in parentheses correspond to the values in output rasters and are defined in <a href="labelHierarchy.json"><code>labelHierarchy.json</code></a>.</p>
+<hr>
+<section id="three-classifiers-and-probability-merging" class="level4">
+<h4 class="anchored" data-anchor-id="three-classifiers-and-probability-merging">Three Classifiers and Probability Merging</h4>
+<p>For each year, we train <strong>3 classifiers</strong>:</p>
+<p><strong>1. Level 1 Classifier (ONE vs non-ONE)</strong> - <strong>Input</strong>: 64 satellite embedding bands + agroecological zone + coordinates - <strong>Task</strong>: Distinguish Open Natural Ecosystems (ONE) from non-ONE landcover - <strong>Output</strong>: 2-band probability raster - <code>prob_one</code>: Probability pixel is an ONE - <code>prob_nonone</code>: Probability pixel is non-ONE</p>
+<p><strong>2. Level 2 Classifier (ONE subtypes)</strong> - <strong>Input</strong>: Same features, trained on the full training dataset - <strong>Task</strong>: Distinguish among 6 ONE subtypes (bare_rocky, dunes, saline_flat, savanna_grass, savanna_shrub, savanna_tree) and 1 aggregate non-ONE subtype - <strong>Output</strong>: 7-band probability raster - 6 bands for the 6 ONE classes - 1 aggregate band for “other” (representing non-ONE pixels, used for probability readjustment)</p>
+<p><strong>3. Level 2 Classifier (non-ONE subtypes)</strong> - <strong>Input</strong>: Same features, trained on the full training dataset - <strong>Task</strong>: Distinguish among 5 non-ONE subtypes (agri_open, built, cultivated_trees, forest, water_wetland) and 1 aggregate ONE subtype - <strong>Output</strong>: 6-band probability raster - 5 bands for the 5 non-ONE classes - 1 aggregate band for “other” (representing ONE pixels, used for probability readjustment)</p>
+<p><strong>Mathematical Merging: Multiplicative Hierarchical Rule</strong></p>
+<p>We combine the hierarchical predictions using an explicit multiplicative approach:</p>
+<p>For each Level 2 class, the final probability is calculated as:</p>
+<pre><code>P(Level 2 class) = P(Level 1 parent) × P(Level 2 class | Level 1 parent)</code></pre>
+<p><strong>For example</strong>: - <code>P(savanna_grass) = P(ONE) × P(savanna_grass | ONE)</code> - <code>P(forest) = P(non-ONE) × P(forest | non-ONE)</code></p>
+<p><strong>Readjustment step</strong>: Before multiplication, Level 1 probabilities are readjusted to account for the “other” class probabilities at Level 2:</p>
+<pre><code>P(ONE)_readjusted = P(ONE) × (1 - P(other | ONE))
+P(non-ONE)_readjusted = P(non-ONE) × (1 - P(other | non-ONE))</code></pre>
+<p>These readjusted L1 probabilities are then renormalized to sum to 1.0, and the multiplicative rule is applied.</p>
+<p><strong>Final output</strong>: After multiplication and normalization, we obtain a full 11-class probability distribution for each pixel, where all probabilities sum to 1.0. We also identify the top-1 label (class with maximum probability) for each pixel.</p>
+<p><strong>Scale</strong>: 3 classifiers per year × 8 years = <strong>24 models total</strong></p>
+<hr>
+</section>
+</section>
+<section id="stage-3-temporal-consistency" class="level3">
+<h3 class="anchored" data-anchor-id="stage-3-temporal-consistency">Stage 3: Temporal Consistency</h3>
+<section id="the-challenge-of-temporal-noise" class="level4">
+<h4 class="anchored" data-anchor-id="the-challenge-of-temporal-noise">The Challenge of Temporal Noise</h4>
+<p>Annual landcover classification faces a fundamental temporal consistency problem: classifying each year independently can produce implausible year-to-year transitions.</p>
+<p><strong>The Problem</strong>: Machine learning classifiers make errors. When we classify each year separately, random classification errors create impossible or highly unlikely landcover transitions. For example: - A stable forest pixel might be misclassified as cropland for one year, then correctly classified as forest the following year - A grassland savanna pixel might flip between grassland savanna and shrubland savanna labels across consecutive years due to subtle seasonal differences in the satellite imagery</p>
+<p><strong>Why It Matters</strong>: These spurious transitions create “noisy” time-series maps that don’t reflect real landscape dynamics. Users studying landcover change need to distinguish genuine transitions (e.g., deforestation, agricultural expansion) from classification noise. Without temporal smoothing, maps show far more change than actually occurred on the ground.</p>
+<p><strong>The Need</strong>: We need a method that removes implausible noise while preserving genuine landscape change—for instance, accepting gradual forest → shrubland savanna → grassland savanna conversion while rejecting forest → built-up → forest oscillations.</p>
+<hr>
+</section>
+<section id="our-solution-hidden-markov-model-with-viterbi-decoding" class="level4">
+<h4 class="anchored" data-anchor-id="our-solution-hidden-markov-model-with-viterbi-decoding">Our Solution: Hidden Markov Model with Viterbi Decoding</h4>
+<p>We apply a statistical framework that incorporates temporal information to find the most probable sequence of landcover labels across all years.</p>
+<p><strong>Conceptual Approach</strong>: Instead of treating each year independently, we model the time series as a sequence where: - <strong>True landcover</strong> is a “hidden state” that we don’t observe directly - <strong>Annual classifications</strong> are noisy “observations” of this hidden state - <strong>Transition probabilities</strong> encode prior knowledge about how frequently different landcover types actually change to one another - <strong>Regional variation</strong> is captured through separate transition matrices for each of 16 agroecological regions</p>
+<p><strong>Method: Hidden Markov Model (HMM) with Viterbi Decoding</strong></p>
+<ol type="1">
+<li><p><strong>Prior probabilities</strong>: The 2017 classification probabilities serve as the starting point for the sequence</p></li>
+<li><p><strong>Observations</strong>: Annual probability distributions for 2018-2024 (from Stage 2)</p></li>
+<li><p><strong>Transition matrices</strong>: Region-specific 11×11 matrices defining P(class_t+1 | class_t) for each agroecological region</p>
+<ul>
+<li>Example: P(forest_2019 | forest_2018) ≈ 0.95 (forests are stable)</li>
+<li>Example: P(built-up_2019 | forest_2018) ≈ 0.01 (unlikely transition)</li>
+<li><strong>Source</strong>: Estimated from a separate temporal training process using landcover time series data</li>
+<li><strong>File</strong>: <a href="aer_hmm_parameters.ini"><code>aer_hmm_parameters.ini</code></a> contains all 16 region-specific matrices</li>
+</ul></li>
+<li><p><strong>Viterbi algorithm</strong>: Pixel-wise dynamic programming to find the most probable label sequence given:</p>
+<ul>
+<li>The observed classification probabilities for each year</li>
+<li>The prior probabilities from 2017</li>
+<li>The region-specific transition probabilities</li>
+</ul>
+<p>The algorithm evaluates all possible label sequences and selects the one with maximum posterior probability.</p></li>
+</ol>
+<p><strong>Why This Works</strong>: The HMM framework statistically penalizes implausible transitions (e.g., forest → built-up → forest in consecutive years) while rewarding realistic ones (e.g., gradual forest → shrubland savanna → grassland savanna conversion). This produces temporally coherent maps without artificially freezing all pixels—genuine change is preserved when supported by strong classification evidence.</p>
+<p><strong>Technical Details</strong>: - Region-stratified transitions account for varying landcover dynamics across India’s diverse agroecological zones (e.g., agricultural regions have different transition patterns than forested regions) - Log-probabilities used for numerical stability in the Viterbi algorithm - Output: Optimal label sequences for 2018-2024 (7 annual bands)</p>
+<hr>
+</section>
+</section>
+<section id="outputs" class="level3">
+<h3 class="anchored" data-anchor-id="outputs">Outputs</h3>
+<p>The final classification outputs are accessible as Google Earth Engine assets in two forms: <strong>probabilistic maps</strong> (annual probability distributions) and <strong>thematic maps</strong> (temporally-consistent discrete labels).</p>
+<section id="probabilistic-outputs-2017-2024-8-years" class="level4">
+<h4 class="anchored" data-anchor-id="probabilistic-outputs-2017-2024-8-years">Probabilistic Outputs (2017-2024, 8 years)</h4>
+<p>Annual 11-class probability distributions with top-1 labels for each year.</p>
+<p><strong>Image Collection</strong>:</p>
+<pre><code>projects/ee-open-natural-ecosystems/assets/publish/ones6Classes/yearWisePredictions2025</code></pre>
+<p><strong>Individual Year Images</strong> (replace <code>{year}</code> with 2017-2024):</p>
+<pre><code>projects/ee-open-natural-ecosystems/assets/publish/ones6Classes/yearWisePredictions2025/probabilistic_{year}</code></pre>
+<p><strong>Format</strong>: Each image contains 12 bands: - 11 probability bands (scaled 0-10000, divide by 10000 to recover actual probabilities) - 1 discrete label band (<code>l2LabelNum</code>, values 1-11)</p>
+<p><strong>Example</strong>: To load the 2023 probabilistic map in Earth Engine:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> prob2023 <span class="op">=</span> ee<span class="op">.</span><span class="fu">Image</span>(<span class="st">'projects/ee-open-natural-ecosystems/assets/publish/ones6Classes/yearWisePredictions2025/probabilistic_2023'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="thematic-outputs-2018-2024-7-years" class="level4">
+<h4 class="anchored" data-anchor-id="thematic-outputs-2018-2024-7-years">Thematic Outputs (2018-2024, 7 years)</h4>
+<p>Temporally-consistent discrete landcover labels produced by HMM Viterbi decoding.</p>
+<p><strong>Image Collection</strong>:</p>
+<pre><code>projects/ee-open-natural-ecosystems/assets/publish/ones6Classes/temporallyConsistentPredictions2025</code></pre>
+<p><strong>Individual Year Images</strong> (replace <code>{year}</code> with 2018-2024):</p>
+<pre><code>projects/ee-open-natural-ecosystems/assets/publish/ones6Classes/temporallyConsistentPredictions2025/thematic_{year}</code></pre>
+<p><strong>Format</strong>: Each image contains a single band with discrete landcover labels (values 1-11)</p>
+<p><strong>Example</strong>: To load the 2023 thematic map in Earth Engine:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> thematic2023 <span class="op">=</span> ee<span class="op">.</span><span class="fu">Image</span>(<span class="st">'projects/ee-open-natural-ecosystems/assets/publish/ones6Classes/temporallyConsistentPredictions2025/thematic_2023'</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Note</strong>: The thematic outputs span 2018-2024 (7 years) because the 2017 probabilities serve as priors for the HMM temporal smoothing process and do not themselves undergo temporal consistency enforcement.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="workflow-flowchart" class="level2">
+<h2 class="anchored" data-anchor-id="workflow-flowchart">Workflow Flowchart</h2>
+<p>The following diagram illustrates the complete processing pipeline from input data to final temporally-consistent landcover maps:</p>
+<pre class="mermaid"><code>flowchart TD
+    Start([Start]) --&gt; Input1[Google Satellite Embeddings&lt;br/&gt;2017-2024&lt;br/&gt;64 bands, 10m]
+    Start --&gt; Input2[Training Points&lt;br/&gt;Balanced by region &amp; class&lt;br/&gt;Year-wise labels]
+    Start --&gt; Input3[Agroecological Regions&lt;br/&gt;16 zones across India]
+
+    Input3 --&gt; Zone[Step 1: Create Zone Raster&lt;br/&gt;biophysical.classificationZones...]
+
+    Input1 --&gt; Assemble[Step 2: Assemble Features&lt;br/&gt;ecological.assembleFeatureBands...]
+    Input2 --&gt; Assemble
+    Zone --&gt; Assemble
+
+    Assemble --&gt; Sample[Sample at Training Points&lt;br/&gt;Year-wise Feature Tables&lt;br/&gt;8 tables 2017-2024]
+
+    Sample --&gt; HierL1[Step 3a: Train L1 Classifiers&lt;br/&gt;ONE vs non-ONE&lt;br/&gt;Gradient Boosted Trees]
+    Sample --&gt; HierL2a[Step 3b: Train L2 Classifiers&lt;br/&gt;6 ONE subtypes]
+    Sample --&gt; HierL2b[Step 3c: Train L2 Classifiers&lt;br/&gt;5 non-ONE subtypes]
+
+    HierL1 --&gt; PredL1[Predict L1 Probabilities&lt;br/&gt;P ONE and P non-ONE&lt;br/&gt;Full study area, all years]
+    HierL2a --&gt; PredL2a[Predict L2 ONE Probabilities&lt;br/&gt;6 ONE classes + other&lt;br/&gt;Full study area, all years]
+    HierL2b --&gt; PredL2b[Predict L2 non-ONE Probabilities&lt;br/&gt;5 non-ONE classes + other&lt;br/&gt;Full study area, all years]
+
+    PredL1 --&gt; Combine[Step 4: Combine Hierarchical Probs&lt;br/&gt;Multiplicative Rule&lt;br/&gt;P L2 = P L1 × P L2│L1]
+    PredL2a --&gt; Combine
+    PredL2b --&gt; Combine
+
+    Combine --&gt; AnnualProbs[Annual Probability Maps&lt;br/&gt;11 classes per year&lt;br/&gt;2017-2024]
+
+    AnnualProbs --&gt; Prior[2017 Probabilities&lt;br/&gt;Used as Priors]
+    AnnualProbs --&gt; Obs[2018-2024 Probabilities&lt;br/&gt;Used as Observations]
+
+    Prior --&gt; HMM[Step 5: HMM Viterbi Decoding&lt;br/&gt;Region-specific transitions&lt;br/&gt;16 agroecological regions]
+    Obs --&gt; HMM
+    Input3 --&gt; Trans[Transition Matrices&lt;br/&gt;aer_hmm_parameters.ini&lt;br/&gt;From separate temporal training]
+    Trans --&gt; HMM
+
+    HMM --&gt; Final[Final Temporally-Consistent&lt;br/&gt;Label Sequences&lt;br/&gt;2018-2024&lt;br/&gt;7 annual bands]
+
+    Final --&gt; End([End])
+
+    classDef inputNode fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    classDef processNode fill:#fff4e1,stroke:#ff9900,stroke-width:2px
+    classDef outputNode fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+
+    class Input1,Input2,Input3,Trans inputNode
+    class Zone,Assemble,Sample,HierL1,HierL2a,HierL2b,PredL1,PredL2a,PredL2b,Combine,HMM processNode
+    class Final,AnnualProbs outputNode</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="workflow_flowchart.png" class="img-fluid figure-img"></p>
+<figcaption>Workflow Flowchart</figcaption>
+</figure>
+</div>
+<p><strong>Diagram Legend</strong>: - <strong>Blue boxes</strong> (Inputs): Input data sources and parameters - <strong>Orange boxes</strong> (Processing): Computational steps and model training/prediction - <strong>Green boxes</strong> (Outputs): Intermediate and final output products</p>
+<p><strong>Key workflow insight</strong>: The 2017 classification serves dual purposes—it is both part of the training/validation process and provides the prior probabilities for the HMM temporal smoothing of years 2018-2024.</p>
+<hr>
+</section>
+<section id="reproducible-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="reproducible-workflow">Reproducible Workflow</h2>
+<p>Follow these steps to reproduce the analysis or adapt it to your own study area.</p>
+<section id="prerequisites" class="level3">
+<h3 class="anchored" data-anchor-id="prerequisites">Prerequisites</h3>
+<ul>
+<li><strong>Google Earth Engine account</strong> with initialized project</li>
+<li><strong>Python 3.x</strong> with the following packages:
+<ul>
+<li><code>earthengine-api</code></li>
+<li><code>geemap</code></li>
+<li><code>anytree</code></li>
+<li><code>configparser</code></li>
+</ul></li>
+<li><strong>Earth Engine CLI</strong> authenticated to your account</li>
+</ul>
+</section>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clone the repository</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>repository-url<span class="op">&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> one-2025-timeseries-classification</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Python dependencies</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install earthengine-api geemap anytree</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Authenticate Earth Engine</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">earthengine</span> authenticate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="configuration" class="level3">
+<h3 class="anchored" data-anchor-id="configuration">Configuration</h3>
+<p>Edit <a href="config.ini"><code>config.ini</code></a> to match your Earth Engine project and asset paths:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 18%">
+<col style="width: 27%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Section</th>
+<th>Description</th>
+<th>Example Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>assetFolderWithFeatures</code></td>
+<td>CORE</td>
+<td>Base folder for all EE assets</td>
+<td><code>projects/your-project/assets/landcover/</code></td>
+</tr>
+<tr class="even">
+<td><code>lulcLabeledPoints</code></td>
+<td>CORE</td>
+<td>Training points FeatureCollection</td>
+<td><code>projects/.../trainingPoints</code></td>
+</tr>
+<tr class="odd">
+<td><code>oneStates</code></td>
+<td>CORE</td>
+<td>Study area boundary FeatureCollection</td>
+<td><code>projects/.../studyAreaBoundary</code></td>
+</tr>
+<tr class="even">
+<td><code>scaleOfMap</code></td>
+<td>CORE</td>
+<td>Output resolution (meters)</td>
+<td><code>10</code></td>
+</tr>
+<tr class="odd">
+<td><code>annualTimeseriesYears</code></td>
+<td>CORE</td>
+<td>Years to process</td>
+<td><code>['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024']</code></td>
+</tr>
+<tr class="even">
+<td><code>indiaAgroEcologicalRegions</code></td>
+<td>AOI-CLASSIFICATION-ZONES-AGROECOLOGICAL-ZONES</td>
+<td>Agroecological zones FeatureCollection</td>
+<td><code>projects/.../agroecologicalRegions</code></td>
+</tr>
+<tr class="odd">
+<td><code>probabilityScalingFactor</code></td>
+<td>CLASSIFICATION-TRAIN&amp;PREDICT</td>
+<td>Scaling factor for probability storage</td>
+<td><code>10000</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note</strong>: The transition probability matrices in <a href="aer_hmm_parameters.ini"><code>aer_hmm_parameters.ini</code></a> were estimated from a separate temporal training process and can be used as-is or re-estimated for your study area.</p>
+<hr>
+</section>
+<section id="step-by-step-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="step-by-step-workflow">Step-by-Step Workflow</h3>
+<section id="step-1-create-classification-zones" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-create-classification-zones">Step 1: Create Classification Zones</h4>
+<p><strong>Notebook</strong>: <a href="generateFeatures.ipynb"><code>generateFeatures.ipynb</code></a> → Section: “Zonation”</p>
+<p><strong>Purpose</strong>: Convert the agroecological regions FeatureCollection into a numeric raster that will be used to stratify the classification by region.</p>
+<p><strong>Key Function</strong>: <code>biophysical.classificationZonesFromAgroecologicalNumeric()</code></p>
+<p><strong>Process</strong>: 1. Reads the agroecological regions FeatureCollection from the path in <code>config.ini</code> 2. Assigns numeric codes (1-20) to each region 3. Rasterizes the regions at 10m resolution 4. Exports the result as an Earth Engine asset</p>
+<p><strong>Output</strong>: A single-band raster with values 1-20 representing the 16 agroecological regions used in the analysis</p>
+<p><strong>Configuration</strong>: Ensure <code>indiaAgroEcologicalRegions</code> in <code>config.ini</code> points to your agroecological zones FeatureCollection.</p>
+<hr>
+</section>
+<section id="step-2-assemble-features-sample-training-points" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-assemble-features-sample-training-points">Step 2: Assemble Features &amp; Sample Training Points</h4>
+<p><strong>Notebook</strong>: <a href="generateFeatures.ipynb"><code>generateFeatures.ipynb</code></a> → Section: “Assemble all features and sample at labeled points”</p>
+<p><strong>Purpose</strong>: Extract all feature values (satellite embeddings, agroecological zone, coordinates) at each training point location, separately for each year.</p>
+<p><strong>Key Function</strong>: <code>ecological.assembleFeatureBandsAndExport_yearwiseInFolder(startFreshExport=True)</code></p>
+<p><strong>Process</strong>: 1. Reads training points from the <code>lulcLabeledPoints</code> asset specified in <code>config.ini</code> 2. For each year (2017-2024): - Retrieves the 64-band Google Satellite Embedding for that year - Assembles composite with embedding bands + agroecological zone + longitude/latitude - Samples all features at training point locations - Adds numeric label columns (<code>labelL1Num</code>, <code>labelL2Num</code>) based on <a href="labelHierarchy.json"><code>labelHierarchy.json</code></a> - Exports as a FeatureCollection</p>
+<p><strong>Output</strong>: 8 FeatureCollections (one per year) named <code>pointsWithFeaturesYearwise_YYYY</code> in the <code>sampledFeatures_balanced/</code> folder</p>
+<p><strong>Note</strong>: This pre-sampling step significantly improves computational efficiency. Instead of sampling features on-the-fly during classification, we sample once and reuse the tables.</p>
+<hr>
+</section>
+<section id="step-3-hierarchical-classification" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-hierarchical-classification">Step 3: Hierarchical Classification</h4>
+<p><strong>Notebook</strong>: <a href="classifyHierarchical_EE.ipynb"><code>classifyHierarchical_EE.ipynb</code></a> → Section: “Classification”</p>
+<p><strong>Purpose</strong>: Train hierarchical classifiers for each year and generate probability maps for the full study area.</p>
+<p><strong>Key Function</strong>: <code>classifyAndAssess.trainAndPredictHierarchical_master()</code></p>
+<p><strong>Process</strong>: For each year (2017-2024):</p>
+<ol type="1">
+<li><strong>Level 1 (L1) Classification</strong>:
+<ul>
+<li>Train a Gradient Boosted Trees classifier to distinguish ONE vs non-ONE</li>
+<li>Apply to full study area to generate L1 probability raster (2 bands: <code>prob_one</code>, <code>prob_nonone</code>)</li>
+</ul></li>
+<li><strong>Level 2 (L2) Classification - ONE branch</strong>:
+<ul>
+<li>Train classifier on full training dataset to distinguish among the 6 ONE subtypes and 1 aggregate non-ONE subtype</li>
+<li>Apply to full study area to generate ONE subtype probabilities (7 bands: 6 ONE classes + 1 “other” aggregate)</li>
+</ul></li>
+<li><strong>Level 2 (L2) Classification - non-ONE branch</strong>:
+<ul>
+<li>Train classifier on full training dataset to distinguish among the 5 non-ONE subtypes and 1 aggregate ONE subtype</li>
+<li>Apply to full study area to generate non-ONE subtype probabilities (6 bands: 5 non-ONE classes + 1 “other” aggregate)</li>
+</ul></li>
+<li><strong>Export</strong>: Each probability raster is scaled by 10,000 and saved as uint16 to reduce storage</li>
+</ol>
+<p><strong>Classifier Parameters</strong>: - Algorithm: Gradient Boosted Trees (<code>ee.Classifier.smileGradientTreeBoost</code>) - Number of trees: 150 - Maximum nodes per tree: 500 - Training fraction: 70% (30% held out, though not used for formal validation in this analysis) - Output mode: <code>MULTIPROBABILITY</code></p>
+<p><strong>Output</strong>: 24 probability images in the results ImageCollection: - 8 images for L1 predictions (one per year, 2 bands each) - 8 images for L2 ONE predictions (one per year, 7 bands each: 6 ONE + other) - 8 images for L2 non-ONE predictions (one per year, 6 bands each: 5 non-ONE + other)</p>
+<p><strong>Computational Note</strong>: This step is the most computationally intensive. Predictions are exported in tiles to manage memory.</p>
+<hr>
+</section>
+<section id="step-4-combine-hierarchical-probabilities" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-combine-hierarchical-probabilities">Step 4: Combine Hierarchical Probabilities</h4>
+<p><strong>Notebook</strong>: <a href="classifyHierarchical_EE.ipynb"><code>classifyHierarchical_EE.ipynb</code></a> → Section: “Combine hierarchical probabilities”</p>
+<p><strong>Purpose</strong>: Merge the L1 and L2 probability predictions using the multiplicative hierarchical rule to produce final 11-class probability distributions.</p>
+<p><strong>Key Function</strong>: <code>classifyAndAssess.annualHierarchicalPredictions()</code></p>
+<p><strong>Process</strong>: For each year (2017-2024):</p>
+<ol type="1">
+<li><p><strong>Read predictions</strong>:</p>
+<ul>
+<li>Load L1 probabilities (ONE vs non-ONE)</li>
+<li>Load L2 ONE probabilities (6 ONE subtypes + other)</li>
+<li>Load L2 non-ONE probabilities (5 non-ONE subtypes + other)</li>
+</ul></li>
+<li><p><strong>Readjust L1 probabilities</strong>:</p>
+<ul>
+<li>Account for “other” class probabilities in L2 predictions</li>
+<li>Renormalize L1 probabilities</li>
+</ul></li>
+<li><p><strong>Apply multiplicative rule</strong>:</p>
+<pre><code>P(ONE subtype) = P(ONE) × P(subtype | ONE)
+P(non-ONE subtype) = P(non-ONE) × P(subtype | non-ONE)</code></pre></li>
+<li><p><strong>Normalize</strong>: Ensure all 11 class probabilities sum to 1.0</p></li>
+<li><p><strong>Top-1 label</strong>: Identify the class with maximum probability for each pixel</p></li>
+<li><p><strong>Export</strong>: Combined probability raster (11 bands + 1 label band) scaled by 10,000</p></li>
+</ol>
+<p><strong>Output</strong>: Annual combined probability images with 12 bands: - 11 probability bands (one per class, scaled 0-10000) - 1 discrete label band (<code>l2LabelNum</code>, values 1-11)</p>
+<hr>
+</section>
+<section id="step-5-temporal-consistency-hmm-viterbi-decoding" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-temporal-consistency-hmm-viterbi-decoding">Step 5: Temporal Consistency (HMM Viterbi Decoding)</h4>
+<p><strong>Notebook</strong>: <a href="classifyHierarchical_EE.ipynb"><code>classifyHierarchical_EE.ipynb</code></a> → Section: “Find max probability timeseries label sequence”</p>
+<p><strong>Purpose</strong>: Apply Hidden Markov Model Viterbi decoding to produce temporally-consistent label sequences for 2018-2024.</p>
+<p><strong>Key Function</strong>: <code>classifyAndAssess.optimalTimeseriesLabels()</code></p>
+<p><strong>Process</strong>:</p>
+<ol type="1">
+<li><strong>Load inputs</strong>:
+<ul>
+<li><strong>Prior probabilities</strong>: 2017 combined probability image (11 bands)</li>
+<li><strong>Observations</strong>: 2018-2024 combined probability images (11 bands × 7 years)</li>
+<li><strong>Transition matrices</strong>: Region-specific 11×11 matrices from <a href="aer_hmm_parameters.ini"><code>aer_hmm_parameters.ini</code></a></li>
+<li><strong>Agroecological zones</strong>: Raster defining which transition matrix to use for each pixel</li>
+</ul></li>
+<li><strong>Prepare for HMM</strong>:
+<ul>
+<li>Convert probabilities to log-probabilities</li>
+<li>Reshape transition matrices for pixel-wise operations</li>
+<li>Sort probability bands by class order</li>
+</ul></li>
+<li><strong>Viterbi decoding</strong> (pixel-wise):
+<ul>
+<li><strong>Step 1</strong> (2018): Combine 2017 prior with 2018 observations</li>
+<li><strong>Steps 2-7</strong> (2019-2024): Iteratively apply Viterbi algorithm
+<ul>
+<li>For each year, find the best previous state and current observation combination</li>
+<li>Track the maximum probability path through the sequence</li>
+</ul></li>
+<li><strong>Backtrack</strong>: Select the most probable label sequence for 2018-2024</li>
+</ul></li>
+<li><strong>Export</strong>: 7-band image with optimal labels for years 2018-2024</li>
+</ol>
+<p><strong>Technical Note</strong>: The transition probabilities in <code>aer_hmm_parameters.ini</code> were estimated from a separate temporal training process using landcover time series data. These capture region-specific patterns—for example, agricultural regions have different transition dynamics than forested regions.</p>
+<p><strong>Output</strong>: A single image with 7 bands (<code>y2018</code> through <code>y2024</code>), where each band contains the optimal landcover label (1-11) for that year, accounting for temporal consistency.</p>
+<hr>
+</section>
+</section>
+<section id="module-reference" class="level3">
+<h3 class="anchored" data-anchor-id="module-reference">Module Reference</h3>
+<p>The analysis is organized into modular Python scripts:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>Key Functions</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="features/biophysical.py"><code>features/biophysical.py</code></a></td>
+<td><code>classificationZonesFromAgroecologicalNumeric()</code></td>
+<td>Rasterizes agroecological region boundaries into numeric zone codes</td>
+</tr>
+<tr class="even">
+<td><a href="features/ecological.py"><code>features/ecological.py</code></a></td>
+<td><code>satelliteEmbeddings()</code><br><code>assembleAllExistingFeatureRasters()</code><br><code>assembleFeatureBandsAndExport_yearwiseInFolder()</code></td>
+<td>Retrieves Google Satellite Embeddings for specified years<br>Assembles multi-band feature composites<br>Samples features at training points and exports year-wise tables</td>
+</tr>
+<tr class="odd">
+<td><a href="classification/classifyAndAssess.py"><code>classification/classifyAndAssess.py</code></a></td>
+<td><code>trainAndPredictHierarchical_master()</code><br><code>annualHierarchicalPredictions()</code><br><code>optimalTimeseriesLabels()</code></td>
+<td>Trains hierarchical classifiers and generates probability maps<br>Combines L1 and L2 probabilities using multiplicative rule<br>Applies HMM Viterbi decoding for temporal consistency</td>
+</tr>
+<tr class="even">
+<td><a href="utils/trees.py"><code>utils/trees.py</code></a></td>
+<td><code>TreeParser</code> class</td>
+<td>Manages label hierarchy from JSON, provides methods to query parent-child relationships and codes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Label Hierarchy</strong>: The classification hierarchy is defined in <a href="labelHierarchy.json"><code>labelHierarchy.json</code></a>. The <code>TreeParser</code> class reads this file and provides utilities to navigate the tree structure during hierarchical classification.</p>
+<hr>
+</section>
+<section id="output-specifications" class="level3">
+<h3 class="anchored" data-anchor-id="output-specifications">Output Specifications</h3>
+<section id="probability-rasters-step-4-outputs" class="level4">
+<h4 class="anchored" data-anchor-id="probability-rasters-step-4-outputs">Probability Rasters (Step 4 Outputs)</h4>
+<p>Each annual combined probability image contains <strong>12 bands</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 22%">
+<col style="width: 19%">
+<col style="width: 22%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Band Name</th>
+<th>Description</th>
+<th>Data Type</th>
+<th>Value Range</th>
+<th>Scaling</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>prob_one_bare_rocky</code></td>
+<td>Probability: Bare/Rocky</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="even">
+<td><code>prob_one_dunes</code></td>
+<td>Probability: Dunes</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="odd">
+<td><code>prob_one_saline_flat</code></td>
+<td>Probability: Saline Flat</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="even">
+<td><code>prob_one_savanna_grass</code></td>
+<td>Probability: Grassland savanna</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="odd">
+<td><code>prob_one_savanna_shrub</code></td>
+<td>Probability: Shrubland savanna</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="even">
+<td><code>prob_one_savanna_tree</code></td>
+<td>Probability: Woodland savanna</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="odd">
+<td><code>prob_nonone_agri_open</code></td>
+<td>Probability: Agriculture/Open</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="even">
+<td><code>prob_nonone_built</code></td>
+<td>Probability: Built-up</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="odd">
+<td><code>prob_nonone_cultivated_trees</code></td>
+<td>Probability: Plantation/Orchard</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="even">
+<td><code>prob_nonone_forest</code></td>
+<td>Probability: Forest</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="odd">
+<td><code>prob_nonone_water_wetland</code></td>
+<td>Probability: Water/Wetland</td>
+<td>uint16</td>
+<td>0-10000</td>
+<td>Actual probability × 10000</td>
+</tr>
+<tr class="even">
+<td><code>l2LabelNum</code></td>
+<td>Top-1 predicted label</td>
+<td>uint8</td>
+<td>1-11</td>
+<td>See label hierarchy for codes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note</strong>: Probabilities are scaled by 10,000 for storage efficiency (stored as integers rather than floats). To recover actual probabilities, divide by 10,000. For example, a value of 7500 in <code>prob_one_savanna_grass</code> represents a probability of 0.75 (75%).</p>
+<hr>
+</section>
+<section id="temporal-label-sequences-step-5-output" class="level4">
+<h4 class="anchored" data-anchor-id="temporal-label-sequences-step-5-output">Temporal Label Sequences (Step 5 Output)</h4>
+<p>The final temporally-consistent output is a single image with <strong>7 bands</strong>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Band Name</th>
+<th>Description</th>
+<th>Data Type</th>
+<th>Value Range</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>y2018</code></td>
+<td>Optimal landcover label for 2018</td>
+<td>uint8</td>
+<td>1-11</td>
+</tr>
+<tr class="even">
+<td><code>y2019</code></td>
+<td>Optimal landcover label for 2019</td>
+<td>uint8</td>
+<td>1-11</td>
+</tr>
+<tr class="odd">
+<td><code>y2020</code></td>
+<td>Optimal landcover label for 2020</td>
+<td>uint8</td>
+<td>1-11</td>
+</tr>
+<tr class="even">
+<td><code>y2021</code></td>
+<td>Optimal landcover label for 2021</td>
+<td>uint8</td>
+<td>1-11</td>
+</tr>
+<tr class="odd">
+<td><code>y2022</code></td>
+<td>Optimal landcover label for 2022</td>
+<td>uint8</td>
+<td>1-11</td>
+</tr>
+<tr class="even">
+<td><code>y2023</code></td>
+<td>Optimal landcover label for 2023</td>
+<td>uint8</td>
+<td>1-11</td>
+</tr>
+<tr class="odd">
+<td><code>y2024</code></td>
+<td>Optimal landcover label for 2024</td>
+<td>uint8</td>
+<td>1-11</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Label Codes</strong>: The numeric label values correspond to the codes defined in <a href="labelHierarchy.json"><code>labelHierarchy.json</code></a>: - 1 = agri_open - 2 = bare_rocky - 3 = built - 4 = cultivated_trees - 5 = dunes - 6 = forest - 7 = saline_flat - 8 = savanna_grass - 9 = savanna_shrub - 10 = savanna_tree - 11 = water_wetland</p>
+<p><strong>Usage</strong>: This output is optimized for change detection and time-series analysis, as the label sequences have been smoothed to remove spurious transitions while preserving genuine landscape change.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="citation" class="level2">
+<h2 class="anchored" data-anchor-id="citation">Citation</h2>
+<p>If you use this code or approach in your research, please cite:</p>
+<pre><code>[Citation information to be added]</code></pre>
+<hr>
+</section>
+<section id="license" class="level2">
+<h2 class="anchored" data-anchor-id="license">License</h2>
+<p>[License information to be added]</p>
+<hr>
+</section>
+<section id="contact" class="level2">
+<h2 class="anchored" data-anchor-id="contact">Contact</h2>
+<p>For questions or issues, please open an issue on this repository or contact [contact information to be added].</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

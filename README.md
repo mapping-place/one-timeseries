@@ -233,6 +233,7 @@ We apply a statistical framework that incorporates temporal information to find 
 
 **Technical Details**:
 - Region-stratified transitions account for varying landcover dynamics across India's diverse agroecological zones (e.g., agricultural regions have different transition patterns than forested regions)
+- Overall accuracy assessment for the 8-year time series and confusion matrices for the 11 classes by 16 agro-ecological regions of India in [this report](hmm_analysis_report.pdf)
 - Log-probabilities used for numerical stability in the Viterbi algorithm
 - Output: Optimal label sequences for 2018-2024
 

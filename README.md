@@ -297,56 +297,7 @@ var thematic2023 = ee.Image('projects/ee-open-natural-ecosystems/assets/publish/
 
 The following diagram illustrates the complete processing pipeline from input data to final temporally-consistent landcover maps:
 
-```mermaid
-flowchart TD
-    Start([Start]) --> Input1[Google Satellite Embeddings<br/>2017-2024<br/>64 bands, 10m]
-    Start --> Input2[Training Points<br/>Balanced by region & class<br/>Year-wise labels]
-    Start --> Input3[Agroecological Regions<br/>16 zones across India]
-
-    Input3 --> Zone[Step 1: Create Zone Raster<br/>biophysical.classificationZones...]
-
-    Input1 --> Assemble[Step 2: Assemble Features<br/>ecological.assembleFeatureBands...]
-    Input2 --> Assemble
-    Zone --> Assemble
-
-    Assemble --> Sample[Sample at Training Points<br/>Year-wise Feature Tables<br/>8 tables 2017-2024]
-
-    Sample --> HierL1[Step 3a: Train L1 Classifiers<br/>ONE vs non-ONE<br/>Gradient Boosted Trees]
-    Sample --> HierL2a[Step 3b: Train L2 Classifiers<br/>6 ONE subtypes]
-    Sample --> HierL2b[Step 3c: Train L2 Classifiers<br/>5 non-ONE subtypes]
-
-    HierL1 --> PredL1[Predict L1 Probabilities<br/>P ONE and P non-ONE<br/>Full study area, all years]
-    HierL2a --> PredL2a[Predict L2 ONE Probabilities<br/>6 ONE classes + other<br/>Full study area, all years]
-    HierL2b --> PredL2b[Predict L2 non-ONE Probabilities<br/>5 non-ONE classes + other<br/>Full study area, all years]
-
-    PredL1 --> Combine[Step 4: Combine Hierarchical Probs<br/>Multiplicative Rule<br/>P L2 = P L1 × P L2│L1]
-    PredL2a --> Combine
-    PredL2b --> Combine
-
-    Combine --> AnnualProbs[Annual Probability Maps<br/>11 classes per year<br/>2017-2024]
-
-    AnnualProbs --> Prior[2017 Probabilities<br/>Used as Priors]
-    AnnualProbs --> Obs[2018-2024 Probabilities<br/>Used as Observations]
-
-    Prior --> HMM[Step 5: HMM Viterbi Decoding<br/>Region-specific transitions<br/>16 agroecological regions]
-    Obs --> HMM
-    Input3 --> Trans[Transition Matrices<br/>aer_hmm_parameters.ini<br/>From separate temporal training]
-    Trans --> HMM
-
-    HMM --> Final[Final Temporally-Consistent<br/>Label Sequences<br/>2018-2024]
-
-    Final --> End([End])
-
-    classDef inputNode fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
-    classDef processNode fill:#fff4e1,stroke:#ff9900,stroke-width:2px
-    classDef outputNode fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
-
-    class Input1,Input2,Input3,Trans inputNode
-    class Zone,Assemble,Sample,HierL1,HierL2a,HierL2b,PredL1,PredL2a,PredL2b,Combine,HMM processNode
-    class Final,AnnualProbs outputNode
-```
-
-[Workflow Flowchart PNG](workflow_flowchart.png)
+![Workflow Flowchart PNG](workflow_flowchart.png)
 
 **Diagram Legend**:
 - **Blue boxes** (Inputs): Input data sources and parameters

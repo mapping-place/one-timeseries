@@ -83,8 +83,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="temporally-consistent-landcover-classification-for-indias-open-natural-ecosystems" class="level1">
-<h1>Temporally-Consistent Landcover Classification for India’s Open Natural Ecosystems</h1>
+<section id="temporally-consistent-probabilistic-landcover-classification-for-indias-open-natural-ecosystems" class="level1">
+<h1>Temporally-Consistent Probabilistic Landcover Classification for India’s Open Natural Ecosystems</h1>
 <p>Annual time-series landcover maps (2017-2024) at 10m resolution using hierarchical classification and Hidden Markov Model-based temporal consistency.</p>
 <hr>
 <section id="table-of-contents" class="level2">
@@ -118,13 +118,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="conceptual-framework">Conceptual Framework</h2>
 <section id="what-this-repository-does" class="level3">
 <h3 class="anchored" data-anchor-id="what-this-repository-does">What This Repository Does</h3>
-<p>This repository produces temporally-consistent annual landcover maps from 2017 to 2024 across 17 Indian states at 10m resolution. The output includes:</p>
+<p>This repository produces temporally-consistent annual landcover maps from 2018 to 2024 across 17 Indian states at 10m resolution. The output includes:</p>
 <ol type="1">
 <li><strong>Annual probability maps</strong>: Full probability distributions across 11 landcover classes for each year</li>
 <li><strong>Temporally-consistent labels</strong>: Discrete landcover classifications that are statistically smoothed across the time series to reduce spurious transitions while preserving genuine landscape change</li>
 </ol>
 <p>The classification distinguishes 11 landcover types, with particular emphasis on accurately mapping India’s Open Natural Ecosystems (ONEs)—6 types including grassland savanna, shrubland savanna, woodland savanna, and other non-forest ecosystems that are often misclassified or overlooked in conventional landcover products.</p>
-<p><strong>Geographic Coverage</strong>: 17 Indian states <strong>Temporal Coverage</strong>: 2017-2024 (8 years) <strong>Spatial Resolution</strong>: 10m pixel size <strong>Classification Scheme</strong>: 11 classes organized in a 3-level hierarchy</p>
+<p><strong>Geographic Coverage</strong>: 17 Indian states <strong>Temporal Coverage</strong>: 2017-2024 (8 years) <strong>Spatial Resolution</strong>: 10m pixel size <strong>Classification Scheme</strong>: 11 classes organized in a 2-level hierarchy</p>
 <hr>
 </section>
 <section id="our-approach" class="level3">
@@ -136,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="input-data">Input Data</h3>
 <p><strong>Satellite Features</strong>: - <strong>Google Satellite Embeddings</strong> (2017-2024): 64-band learned representations from Google’s deep learning model, capturing spectral, textural, and contextual information at 10m resolution - <strong>Agroecological Regions</strong>: Zonation layer with 16 regions across India, used to stratify classification and account for regional variation in landcover patterns - <strong>Spatial Coordinates</strong>: Longitude and latitude for each pixel, providing geographic context</p>
 <p><strong>Training Data</strong>: - <strong>Temporal coverage</strong>: Year-wise labeled samples for 2017-2024 - <strong>Spatial balance</strong>: Stratified across 16 agroecological regions to ensure representation of India’s diverse landscapes - <strong>Class balance</strong>: Balanced across all 11 landcover types to prevent classifier bias toward dominant classes - <strong>Source</strong>: Assembled from publicly available landcover masks and reference layers (see <a href="trainingData/"><code>trainingData/</code></a> folder)</p>
-<p><strong>Study Area</strong>: - <strong>States</strong>: Delhi, Punjab, Uttar Pradesh, Haryana, Rajasthan, Gujarat, Maharashtra, Madhya Pradesh, Chhattisgarh, Jharkhand, Bihar, Telangana, Andhra Pradesh, Tamil Nadu, Karnataka, Goa, West Bengal - <strong>Resolution</strong>: 10m pixel size - <strong>Projection</strong>: EPSG:24343 for export</p>
+<p><strong>Study Area</strong>: - <strong>States</strong>: Delhi, Punjab, Uttar Pradesh, Haryana, Rajasthan, Gujarat, Maharashtra, Madhya Pradesh, Chhattisgarh, Jharkhand, Bihar, Telangana, Andhra Pradesh, Tamil Nadu, Karnataka, Goa, West Bengal - <strong>Resolution</strong>: 10m pixel size - <strong>Projection</strong>: EPSG:24343 (UTM zone 43N) for export</p>
 <hr>
 </section>
 <section id="stage-1-probabilistic-classification" class="level3">
@@ -156,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="label-hierarchy" class="level3">
 <h3 class="anchored" data-anchor-id="label-hierarchy">Label Hierarchy</h3>
-<p>Our classification uses a 3-level hierarchy with 11 landcover classes at the finest level:</p>
+<p>Our classification uses a 2-level hierarchy with 11 landcover classes at the finest level:</p>
 <pre><code>Level 0: Landcover (root)
 ├─ Level 1: non-ONE (code: 100)
 │  ├─ Level 2: agri_open (1)              - Agriculture and open lands
@@ -199,7 +199,7 @@ P(non-ONE)_readjusted = P(non-ONE) × (1 - P(other | non-ONE))</code></pre>
 <h4 class="anchored" data-anchor-id="the-challenge-of-temporal-noise">The Challenge of Temporal Noise</h4>
 <p>Annual landcover classification faces a fundamental temporal consistency problem: classifying each year independently can produce implausible year-to-year transitions.</p>
 <p><strong>The Problem</strong>: Machine learning classifiers make errors. When we classify each year separately, random classification errors create impossible or highly unlikely landcover transitions. For example: - A stable forest pixel might be misclassified as cropland for one year, then correctly classified as forest the following year - A grassland savanna pixel might flip between grassland savanna and shrubland savanna labels across consecutive years due to subtle seasonal differences in the satellite imagery</p>
-<p><strong>Why It Matters</strong>: These spurious transitions create “noisy” time-series maps that don’t reflect real landscape dynamics. Users studying landcover change need to distinguish genuine transitions (e.g., deforestation, agricultural expansion) from classification noise. Without temporal smoothing, maps show far more change than actually occurred on the ground.</p>
+<p><strong>Why It Matters</strong>: These spurious transitions create “noisy” time-series maps that don’t reflect real landscape dynamics. Users studying landcover change need to distinguish genuine transitions (e.g., deforestation, agricultural expansion) from classification noise. Without temporal regularization, maps show far more change than actually occurred on the ground.</p>
 <p><strong>The Need</strong>: We need a method that removes implausible noise while preserving genuine landscape change—for instance, accepting gradual forest → shrubland savanna → grassland savanna conversion while rejecting forest → built-up → forest oscillations.</p>
 <hr>
 </section>
@@ -227,7 +227,7 @@ P(non-ONE)_readjusted = P(non-ONE) × (1 - P(other | non-ONE))</code></pre>
 <p>The algorithm evaluates all possible label sequences and selects the one with maximum posterior probability.</p></li>
 </ol>
 <p><strong>Why This Works</strong>: The HMM framework statistically penalizes implausible transitions (e.g., forest → built-up → forest in consecutive years) while rewarding realistic ones (e.g., gradual forest → shrubland savanna → grassland savanna conversion). This produces temporally coherent maps without artificially freezing all pixels—genuine change is preserved when supported by strong classification evidence.</p>
-<p><strong>Technical Details</strong>: - Region-stratified transitions account for varying landcover dynamics across India’s diverse agroecological zones (e.g., agricultural regions have different transition patterns than forested regions) - Log-probabilities used for numerical stability in the Viterbi algorithm - Output: Optimal label sequences for 2018-2024 (7 annual bands)</p>
+<p><strong>Technical Details</strong>: - Region-stratified transitions account for varying landcover dynamics across India’s diverse agroecological zones (e.g., agricultural regions have different transition patterns than forested regions) - Overall accuracy assessment for the 8-year time series and confusion matrices for the 11 classes by 16 agro-ecological regions of India in <a href="hmm_analysis_report.pdf">this report</a> - Log-probabilities used for numerical stability in the Viterbi algorithm - Output: Optimal label sequences for 2018-2024</p>
 <hr>
 </section>
 </section>
@@ -264,56 +264,10 @@ P(non-ONE)_readjusted = P(non-ONE) × (1 - P(other | non-ONE))</code></pre>
 <section id="workflow-flowchart" class="level2">
 <h2 class="anchored" data-anchor-id="workflow-flowchart">Workflow Flowchart</h2>
 <p>The following diagram illustrates the complete processing pipeline from input data to final temporally-consistent landcover maps:</p>
-<pre class="mermaid"><code>flowchart TD
-    Start([Start]) --&gt; Input1[Google Satellite Embeddings&lt;br/&gt;2017-2024&lt;br/&gt;64 bands, 10m]
-    Start --&gt; Input2[Training Points&lt;br/&gt;Balanced by region &amp; class&lt;br/&gt;Year-wise labels]
-    Start --&gt; Input3[Agroecological Regions&lt;br/&gt;16 zones across India]
-
-    Input3 --&gt; Zone[Step 1: Create Zone Raster&lt;br/&gt;biophysical.classificationZones...]
-
-    Input1 --&gt; Assemble[Step 2: Assemble Features&lt;br/&gt;ecological.assembleFeatureBands...]
-    Input2 --&gt; Assemble
-    Zone --&gt; Assemble
-
-    Assemble --&gt; Sample[Sample at Training Points&lt;br/&gt;Year-wise Feature Tables&lt;br/&gt;8 tables 2017-2024]
-
-    Sample --&gt; HierL1[Step 3a: Train L1 Classifiers&lt;br/&gt;ONE vs non-ONE&lt;br/&gt;Gradient Boosted Trees]
-    Sample --&gt; HierL2a[Step 3b: Train L2 Classifiers&lt;br/&gt;6 ONE subtypes]
-    Sample --&gt; HierL2b[Step 3c: Train L2 Classifiers&lt;br/&gt;5 non-ONE subtypes]
-
-    HierL1 --&gt; PredL1[Predict L1 Probabilities&lt;br/&gt;P ONE and P non-ONE&lt;br/&gt;Full study area, all years]
-    HierL2a --&gt; PredL2a[Predict L2 ONE Probabilities&lt;br/&gt;6 ONE classes + other&lt;br/&gt;Full study area, all years]
-    HierL2b --&gt; PredL2b[Predict L2 non-ONE Probabilities&lt;br/&gt;5 non-ONE classes + other&lt;br/&gt;Full study area, all years]
-
-    PredL1 --&gt; Combine[Step 4: Combine Hierarchical Probs&lt;br/&gt;Multiplicative Rule&lt;br/&gt;P L2 = P L1 × P L2│L1]
-    PredL2a --&gt; Combine
-    PredL2b --&gt; Combine
-
-    Combine --&gt; AnnualProbs[Annual Probability Maps&lt;br/&gt;11 classes per year&lt;br/&gt;2017-2024]
-
-    AnnualProbs --&gt; Prior[2017 Probabilities&lt;br/&gt;Used as Priors]
-    AnnualProbs --&gt; Obs[2018-2024 Probabilities&lt;br/&gt;Used as Observations]
-
-    Prior --&gt; HMM[Step 5: HMM Viterbi Decoding&lt;br/&gt;Region-specific transitions&lt;br/&gt;16 agroecological regions]
-    Obs --&gt; HMM
-    Input3 --&gt; Trans[Transition Matrices&lt;br/&gt;aer_hmm_parameters.ini&lt;br/&gt;From separate temporal training]
-    Trans --&gt; HMM
-
-    HMM --&gt; Final[Final Temporally-Consistent&lt;br/&gt;Label Sequences&lt;br/&gt;2018-2024&lt;br/&gt;7 annual bands]
-
-    Final --&gt; End([End])
-
-    classDef inputNode fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
-    classDef processNode fill:#fff4e1,stroke:#ff9900,stroke-width:2px
-    classDef outputNode fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
-
-    class Input1,Input2,Input3,Trans inputNode
-    class Zone,Assemble,Sample,HierL1,HierL2a,HierL2b,PredL1,PredL2a,PredL2b,Combine,HMM processNode
-    class Final,AnnualProbs outputNode</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="workflow_flowchart.png" class="img-fluid figure-img"></p>
-<figcaption>Workflow Flowchart</figcaption>
+<figcaption>Workflow Flowchart PNG</figcaption>
 </figure>
 </div>
 <p><strong>Diagram Legend</strong>: - <strong>Blue boxes</strong> (Inputs): Input data sources and parameters - <strong>Orange boxes</strong> (Processing): Computational steps and model training/prediction - <strong>Green boxes</strong> (Outputs): Intermediate and final output products</p>
@@ -339,15 +293,15 @@ P(non-ONE)_readjusted = P(non-ONE) × (1 - P(other | non-ONE))</code></pre>
 </section>
 <section id="setup" class="level3">
 <h3 class="anchored" data-anchor-id="setup">Setup</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clone the repository</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>repository-url<span class="op">&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> one-2025-timeseries-classification</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Python dependencies</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install earthengine-api geemap anytree</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Authenticate Earth Engine</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="ex">earthengine</span> authenticate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clone the repository</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>repository-url<span class="op">&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> one-2025-timeseries-classification</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Python dependencies</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install earthengine-api geemap anytree</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Authenticate Earth Engine</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="ex">earthengine</span> authenticate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="configuration" class="level3">
 <h3 class="anchored" data-anchor-id="configuration">Configuration</h3>
@@ -746,17 +700,30 @@ P(non-ONE subtype) = P(non-ONE) × P(subtype | non-ONE)</code></pre></li>
 <section id="citation" class="level2">
 <h2 class="anchored" data-anchor-id="citation">Citation</h2>
 <p>If you use this code or approach in your research, please cite:</p>
-<pre><code>[Citation information to be added]</code></pre>
+<pre><code>Koulgi, P.S. &amp; Madhusudan, M.D. (2025) A consistent multi-temporal dataset on India's Open Natural Ecosystems. https://github.com/mapping-place/one-timeseries</code></pre>
 <hr>
 </section>
 <section id="license" class="level2">
 <h2 class="anchored" data-anchor-id="license">License</h2>
-<p>[License information to be added]</p>
+<p><a href="https://github.com/mapping-place/one-timeseries?tab=MIT-1-ov-file#MIT-1-ov-file">MIT License</a></p>
+<p>Copyright © 2025, Koulgi, P.S. &amp; Madhusudan, M.D.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<hr>
+</section>
+<section id="funding-and-support" class="level2">
+<h2 class="anchored" data-anchor-id="funding-and-support">Funding and support</h2>
+<p>Financial support for various aspects of this mapping work came from: * <a href="https://www.thehabitatstrust.org/">The Habitats Trust</a> * <a href="https://www.ncbs.res.in/">National Centre for Biological Sciences</a>, its <a href="https://archives.ncbs.res.in/">Archives</a>, <a href="https://www.tnq.co.in/csr-activities/">TNQ Technologies</a> * The Nadathur Foundation * <a href="https://azimpremjiuniversity.edu.in/">Azim Premji University</a> as part of the Research Funding Programme * <a href="https://www.atree.org/">ATREE</a></p>
+<p>Technical and logistical support came from: * <a href="http://www.ncf-india.org/">Nature Conservation Foundation</a> * <a href="https://www.ncbs.res.in/faculty/mahesh">Mahesh Sankaran Lab</a> * <a href="https://earthengine.google.com/">Google Earth Engine</a></p>
+<p>Further, our work would not be possible without the creativity and generosity of efforts behind many free, public and open source scientific computation resources and software tools, chief among them being: * <a href="https://geemap.org/">geemap</a> by <a href="https://github.com/giswqs">Qiusheng Wu</a> * <a href="https://spatialthoughts.com/">Spatial Thoughts</a> by <a href="https://github.com/spatialthoughts">Ujaval Gandhi</a> * <a href="https://gee-community-catalog.org/">awesome-gee-community-catalog</a> by <a href="https://github.com/samapriya/">Samapriya Roy</a> * <a href="https://groups.google.com/g/google-earth-engine-developers">Google Earth Engine Developers Group</a> * <a href="https://gis.stackexchange.com/questions/tagged/google-earth-engine">Google Earth Engine on Stack Exchange</a> * <a href="https://qgis.org/">QGIS</a> * Yoni Gavish of <a href="https://doi.org/10.1016/j.isprsjprs.2017.12.002"><em>Gavish et al.&nbsp;(2018)</em></a> * Multiple publicly-funded central and state government portals and repositories.</p>
+<p>These analyses were carried out on the <a href="https://earthengine.google.com/">Google Earth Engine</a> cloud computing platform using the <a href="https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL">AlphaEarth Foundations Satellite Embedding dataset</a> by Google and Google DeepMind.</p>
+<p>Abi Tamim Vanak, Jayashree Ratnam and Mahesh Sankaran have helped bring ecological understanding of open natural ecosystems into our work. We are also grateful to Aparna Watve, Jithin Vijayan, Kaushik Sarkar, Pranav Chanchani, Rohit Naniwadekar and Vaishnavi Apte for generously contributing training data.</p>
 <hr>
 </section>
 <section id="contact" class="level2">
 <h2 class="anchored" data-anchor-id="contact">Contact</h2>
-<p>For questions or issues, please open an issue on this repository or contact [contact information to be added].</p>
+<p>For general comments, feedback, or if you would like to work with us, <a href="https://forms.gle/r4NiLoEjVRaHoTE48">reach out to us here</a>. For questions or issues on our code, please open an issue on this repository.</p>
 </section>
 </section>
 

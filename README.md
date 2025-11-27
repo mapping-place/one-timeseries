@@ -656,6 +656,36 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---
 
+## Funding and support
+
+Financial support for various aspects of this mapping work came from: 
+* [The Habitats Trust](https://www.thehabitatstrust.org/)
+* [National Centre for Biological Sciences](https://www.ncbs.res.in/), its [Archives](https://archives.ncbs.res.in/), [TNQ Technologies](https://www.tnq.co.in/csr-activities/)
+* The Nadathur Foundation
+* [Azim Premji University](https://azimpremjiuniversity.edu.in/) as part of the Research Funding Programme
+* [ATREE](https://www.atree.org/)
+
+Technical and logistical support came from: 
+* [Nature Conservation Foundation](http://www.ncf-india.org/)
+* [Mahesh Sankaran Lab](https://www.ncbs.res.in/faculty/mahesh)
+* [Google Earth Engine](https://earthengine.google.com/)
+
+Further, our work would not be possible without the creativity and generosity of efforts behind many free, public and open source scientific computation resources and software tools, chief among them being: 
+* [geemap](https://geemap.org/) by  [Qiusheng Wu](https://github.com/giswqs)
+* [Spatial Thoughts](https://spatialthoughts.com/) by [Ujaval Gandhi](https://github.com/spatialthoughts)
+* [awesome-gee-community-catalog](https://gee-community-catalog.org/) by [Samapriya Roy](https://github.com/samapriya/)
+* [Google Earth Engine Developers Group](https://groups.google.com/g/google-earth-engine-developers)
+* [Google Earth Engine on Stack Exchange](https://gis.stackexchange.com/questions/tagged/google-earth-engine)
+* [QGIS](https://qgis.org/)
+* Yoni Gavish of [*Gavish et al. (2018)*](https://doi.org/10.1016/j.isprsjprs.2017.12.002)
+* Multiple publicly-funded central and state government portals and repositories. 
+
+These analyses were carried out on the [Google Earth Engine](https://earthengine.google.com/) cloud computing platform using the [AlphaEarth Foundations Satellite Embedding dataset](https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL) by Google and Google DeepMind.
+
+Abi Tamim Vanak, Jayashree Ratnam and Mahesh Sankaran have helped bring ecological understanding of open natural ecosystems into our work. We are also grateful to Aparna Watve, Jithin Vijayan, Kaushik Sarkar, Pranav Chanchani, Rohit Naniwadekar and Vaishnavi Apte for generously contributing training data.
+
+---
+
 ## Contact
 
 For general comments, feedback, or if you would like to work with us, [reach out to us here](https://forms.gle/r4NiLoEjVRaHoTE48). For questions or issues on our code, please open an issue on this repository. 
